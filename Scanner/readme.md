@@ -83,6 +83,74 @@ enum class CharType
 
 코드는 `Scanner.cpp`에서 확인할 수 있다.
 
+
+## 토큰 리스트 출력
+다음과 같은 소스 코드를 출력해보자.
+
+```cpp
+auto main(int argc, char **argv) -> int
+{
+	string sourceCode = R""""(
+		function main() {
+			print 'Hello, World!';
+			printLine 1234;
+		}
+	)"""";
+
+	// 스캔하고
+	auto tokenList = scan(sourceCode);
+
+	// 출력한다.
+	printTokenList(tokenList);
+}
+```
+
+다음 같이 콘솔창에 출력된다.
+
+```
+KIND        STRING
+-----------------------
+function    function
+#identifier main
+(           (
+)           )
+{           {
+print       print
+#String     Hello, World!
+;           ;
+printLine   printLine
+#Number     1234
+;           ;
+}           }
+#EndOfToken 
+```
+
+-> binary 관련 에러가 나타날 수 있다. 이때는 `Token.cpp` 파일 밑에 다음과 같은 함수를 추가해 준다. include도 빼먹지 말자.
+
+```cpp
+// Token.cpp
+static auto kindToString = []
+{
+	map<Kind, string> result;
+	for (auto &[key, value] : stringToKind)
+		result[value] = key;
+	return result;
+}();
+
+auto toString(Kind type) -> string
+{
+	if (kindToString.count(type))
+		return kindToString.at(type);
+	return "";
+}
+
+auto operator<<(ostream &stream, Token &token) -> ostream &
+{
+	return stream << setw(12) << left << toString(token.kind) << token.string;
+}
+```
+
+
 ---
 
 어휘 분석에 대해 정리해보자면 다음과 같은 특징이 있다.

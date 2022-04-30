@@ -56,11 +56,11 @@ enum class Kind
 };
 
 auto toKind(string) -> Kind;
-
+auto toString(Kind) -> string;
 struct Token
 {
 	Kind kind = Kind::Unknown;
 	string string;
 };
 
-auto operator<<(ostream &, Token &) -> ostream &;
+auto operator<<(ostream&, Token&) -> ostream&;

@@ -1,7 +1,10 @@
 #include <map>
+#include <iomanip>
 #include "Token.h"
 
 using std::map;
+using std::setw;
+using std::left;
 
 static map<string, Kind> stringToKind = {
 		{"#unknown", Kind::Unknown},
@@ -55,6 +58,14 @@ static map<string, Kind> stringToKind = {
 		{"]", Kind::RightBracket},
 };
 
+static auto kindToString = []
+{
+	map<Kind, string> result;
+	for (auto &[key, value] : stringToKind)
+		result[value] = key;
+	return result;
+}();
+
 // 식별자인지, 키워드인지 체크한다.
 // 식별자는 유저가 정한 이름이다.
 auto toKind(string string) -> Kind
@@ -62,4 +73,16 @@ auto toKind(string string) -> Kind
 	if (stringToKind.count(string))
 		return stringToKind.at(string);
 	return Kind::Unknown;
+}
+
+auto toString(Kind type) -> string
+{
+	if (kindToString.count(type))
+		return kindToString.at(type);
+	return "";
+}
+
+auto operator<<(ostream &stream, Token &token) -> ostream &
+{
+	return stream << setw(12) << left << toString(token.kind) << token.string;
 }
