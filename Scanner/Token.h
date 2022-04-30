@@ -62,3 +62,5 @@ struct Token
 	Kind kind = Kind::Unknown;
 	string string;
 };
+
+auto operator<<(ostream &, Token &) -> ostream &;

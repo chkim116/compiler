@@ -1,12 +1,13 @@
 #include "Main.h"
 
-// TODO: scan 출력
-auto scan(string) -> vector<Token>;
-
-auto main() -> void
+auto main(int argc, char **argv) -> int
 {
 	// TODO: 코드 주입
-	string sourceCode = "코드";
+	string sourceCode = R""""(
+			function main() {
+				print 'Hello, World!';
+			}
+			)"""";
 
 	auto tokenList = scan(sourceCode);
 	printTokenList(tokenList);
@@ -16,8 +17,8 @@ auto main() -> void
 auto printTokenList(vector<Token> tokenList) -> void
 {
 	cout << setw(12) << left << "KIND"
-			 << "STRING" << endl;
-	cout << string(23, '-') << endl;
+			 << "STRING" << '\n';
+	cout << string(23, '-') << '\n';
 	for (auto &token : tokenList)
-		cout << token << endl;
+		cout << token << '\n';
 }
